@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Recipe, RecipeCategory, RecipeLike
+from .models import Recipe, RecipeCategory, RecipeLike, RecipeComment
 
 
 class RecipeCategorySerializer(serializers.ModelSerializer):
@@ -44,6 +44,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         return recipe_instance
 
     def update(self, instance, validated_data):
+        print(validated_data)
         if 'category' in validated_data:
             nested_serializer = self.fields['category']
             nested_instance = instance.category
@@ -60,3 +61,9 @@ class RecipeLikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = RecipeLike
         fields = ('id', 'user', 'recipe')
+
+
+class RecipeCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecipeComment
+        fields = ('id', 'user', 'recipe', 'text', 'created_at')

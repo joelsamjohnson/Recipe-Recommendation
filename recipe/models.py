@@ -36,8 +36,8 @@ class Recipe(models.Model):
     title = models.CharField(max_length=200)
     desc = models.CharField(_('Short description'), max_length=200)
     cook_time = models.TimeField()
-    ingredients = models.TextField()
-    procedure = models.TextField()
+    ingredients = models.JSONField(default=list)
+    procedure = models.JSONField(default=list)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -65,3 +65,17 @@ class RecipeLike(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class RecipeComment(models.Model):
+    """
+    Model to like recipes
+    """
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    text = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user.username}: {self.text[:20]}'
