@@ -9,6 +9,8 @@ urlpatterns = [
     path('<int:pk>/', views.RecipeAPIView.as_view(), name="recipe-detail"),
     path('create/', views.RecipeCreateAPIView.as_view(), name="recipe-create"),
     path('<int:pk>/like/', views.RecipeLikeAPIView.as_view(), name='recipe-like'),
+    path('<int:pk>/comment/', views.RecipeCommentAPIView.as_view(), name='recipe-comment'),
+    path('comment/recipe/<int:pk>/', views.RecipeCommentAPIView.as_view(), name='recipe-comments'),
     path('my-recipes/', views.MyRecipeView.as_view(), name="view-user-recipe"),
 
 

@@ -15,13 +15,14 @@ class RecipeSerializer(serializers.ModelSerializer):
     category_name = serializers.SerializerMethodField()
     category = RecipeCategorySerializer()
     total_number_of_likes = serializers.SerializerMethodField()
+    total_number_of_comments = serializers.SerializerMethodField()
     total_number_of_bookmarks = serializers.SerializerMethodField()
 
     class Meta:
         model = Recipe
         fields = ('id', 'category', 'category_name', 'picture', 'title', 'desc',
                   'cook_time', 'ingredients', 'procedure', 'author', 'username',
-                  'total_number_of_likes', 'total_number_of_bookmarks')
+                  'total_number_of_likes', 'total_number_of_comments','total_number_of_bookmarks')
 
     def get_username(self, obj):
         return obj.author.username
@@ -31,6 +32,9 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def get_total_number_of_likes(self, obj):
         return obj.get_total_number_of_likes()
+
+    def get_total_number_of_comments(self, obj):
+        return obj.get_total_number_of_comments()
 
     def get_total_number_of_bookmarks(self, obj):
         return obj.get_total_number_of_bookmarks()
@@ -66,4 +70,5 @@ class RecipeLikeSerializer(serializers.ModelSerializer):
 class RecipeCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = RecipeComment
-        fields = ('id', 'user', 'recipe', 'text', 'created_at')
+        fields = ('id', 'user', 'recipe', 'text', 'created')
+        read_only_fields = ['user', 'recipe']
