@@ -1,7 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
-from django.views import View
 from django.views.generic import ListView
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
@@ -9,24 +6,25 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from followers.exceptions import AlreadyFollowingError
 from followers.models import Follower
 from users.serializers import CustomUserSerializer
 User = get_user_model()
 
-
-class FindFollowersListView(LoginRequiredMixin, ListView):
-    model = Follower
-
-    def get_queryset(self):
-        current_user_followers = self.request.user.to_user.values('id')
-        following_others = list(
-            Follower.objects.filter(from_user=self.request.user)
-            .values_list('to_user_id', flat=True))
-        users = User.objects.filter(id__in=current_user_followers).exclude(id__in=following_others).exclude(
-            id=self.request.user.id)
-        return users
+#
+# class FindFollowersListView(ListView):
+#     model = Follower
+#     permi
+#
+#     def get_queryset(self):
+#         current_user_followers = self.request.user.to_user.values('id')
+#         following_others = list(
+#             Follower.objects.filter(from_user=self.request.user)
+#             .values_list('to_user_id', flat=True))
+#         users = User.objects.filter(id__in=current_user_followers).exclude(id__in=following_others).exclude(
+#             id=self.request.user.id)
+#         return users
+#
 
 
 class FollowUserAPIView(APIView):

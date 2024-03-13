@@ -12,8 +12,7 @@ class RecipeCategorySerializer(serializers.ModelSerializer):
 class RecipeSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(read_only=True)
     username = serializers.SerializerMethodField()
-    category_name = serializers.SerializerMethodField()
-    category = RecipeCategorySerializer()
+    category_name = serializers.CharField(write_only=True)
     total_number_of_likes = serializers.SerializerMethodField()
     total_number_of_comments = serializers.SerializerMethodField()
     total_number_of_bookmarks = serializers.SerializerMethodField()
@@ -23,7 +22,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         fields = ('id', 'category', 'category_name', 'picture', 'title', 'desc',
                   'cook_time', 'ingredients', 'procedure', 'author', 'username',
                   'total_number_of_likes', 'total_number_of_comments','total_number_of_bookmarks')
-
+        read_only_fields = ('category',)
     def get_username(self, obj):
         return obj.author.username
 
@@ -40,12 +39,11 @@ class RecipeSerializer(serializers.ModelSerializer):
         return obj.get_total_number_of_bookmarks()
 
     def create(self, validated_data):
-        category = validated_data.pop('category')
-        category_instance, created = RecipeCategory.objects.get_or_create(
-            **category)
-        recipe_instance = Recipe.objects.create(
-            **validated_data, category=category_instance)
-        return recipe_instance
+        category_name = validated_data.pop('category_name')
+        category, _ = RecipeCategory.objects.get_or_create(name=category_name)
+        validated_data['category'] = category
+        recipe = Recipe.objects.create(**validated_data)
+        return recipe
 
     def update(self, instance, validated_data):
         print(validated_data)

@@ -2,8 +2,9 @@ from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
-
+from rest_framework.views import APIView
 from .models import Recipe, RecipeLike, RecipeComment
+from followers.models import Follower
 from .serializers import RecipeLikeSerializer, RecipeSerializer, RecipeCommentSerializer
 from .permissions import IsAuthorOrReadOnly
 
@@ -118,16 +119,25 @@ class MyRecipeView(generics.ListCreateAPIView):
         return Recipe.objects.filter(author=self.request.user)
 
 
+class FeedAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        following_users = Follower.objects.filter(from_user=request.user).values_list('to_user_id', flat=True)
+        recipes = Recipe.objects.filter(author__in=following_users).order_by('-created_at')
+        serializer = RecipeSerializer(recipes, many=True)
+        return Response(serializer.data)
+
+
 from django.http import JsonResponse
 import requests
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 headers = {
-    "X-RapidAPI-Key": "a2902d5316msh18425308907ed14p12fb8cjsn00f739bb744d",
-    "X-RapidAPI-Host": "yummly2.p.rapidapi.com"
+	"X-RapidAPI-Key": "a2902d5316msh18425308907ed14p12fb8cjsn00f739bb744d",
+	"X-RapidAPI-Host": "yummly2.p.rapidapi.com"
 }
-
 
 @csrf_exempt
 def yummly_autocomplete(request):
@@ -155,9 +165,9 @@ def yummly_autocomplete(request):
 @csrf_exempt
 @require_http_methods(["GET"])
 def yummly_search(request):
-    query = request.GET.get('q', '')
+    query = request.GET.get('query', '')
     start = request.GET.get('start', '0')
-    maxResults = request.GET.get('maxResults', '18')
+    maxResults = request.GET.get('maxResults', '3')
     url = "https://yummly2.p.rapidapi.com/feeds/search"
     params = {
         "q": query,
@@ -180,7 +190,7 @@ def yummly_search(request):
 @require_http_methods(["GET"])
 def yummly_feeds_list(request):
     start = request.GET.get('start', '0')
-    limit = request.GET.get('limit', '24')
+    limit = request.GET.get('limit', '1')
     tag = request.GET.get('tag', '')
 
     url = "https://yummly2.p.rapidapi.com/feeds/list"

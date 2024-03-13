@@ -18,9 +18,7 @@ env = environ.Env()
 environ.Env.read_env()
 
 # Use your environment variables
-SECRET_KEY = env('SECRET_KEY')
-
-
+SECRET_KEY = 'vg$p^630rk2)!shd&t^6*99f49rvuru$90f-@o7!crcx80aqb+'
 
 # Application definition
 

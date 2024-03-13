@@ -66,6 +66,9 @@ class RecipeLike(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ('user', 'recipe')
+
     def __str__(self):
         return self.user.username
 

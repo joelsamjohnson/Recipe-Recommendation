@@ -12,7 +12,7 @@ urlpatterns = [
     path('<int:pk>/comment/', views.RecipeCommentAPIView.as_view(), name='recipe-comment'),
     path('comment/recipe/<int:pk>/', views.RecipeCommentAPIView.as_view(), name='recipe-comments'),
     path('my-recipes/', views.MyRecipeView.as_view(), name="view-user-recipe"),
-
+    path('feed/', views.FeedAPIView.as_view(), name='feed'),
 
     path('yummly-autocomplete/', views.yummly_autocomplete, name='yummly_autocomplete'),
     path('yummly-search/', views.yummly_search, name='yummly_search'),
