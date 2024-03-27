@@ -22,3 +22,10 @@ CLOUDINARY_STORAGE = {
 }
 
 django_heroku.settings(locals())
+
+import firebase_admin
+from firebase_admin import credentials
+
+cred = credentials.Certificate("C:/Users/saraj/PycharmProjects/recipe-api/recipe-recommendation-sy-7facd-firebase-adminsdk-h523u-b428a4ca19.json")
+firebase_admin.initialize_app(cred)
+

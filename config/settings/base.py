@@ -170,7 +170,7 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Mesob Recipe API',
+    'TITLE': 'Sizzle.it API',
     'DESCRIPTION': 'A recipe sharing platform built using DRF',
     'VERSION': '1.0.0',
 }

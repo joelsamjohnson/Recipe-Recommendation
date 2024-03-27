@@ -32,7 +32,7 @@ class Recipe(models.Model):
         settings.AUTH_USER_MODEL, related_name="recipes", on_delete=models.CASCADE)
     category = models.ForeignKey(
         RecipeCategory, related_name="recipe_list", on_delete=models.SET(get_default_recipe_category))
-    picture = models.ImageField(upload_to='uploads')
+    picture = models.ImageField(upload_to='uploads', blank=True, null=True)
     title = models.CharField(max_length=200)
     desc = models.CharField(_('Short description'), max_length=200)
     cook_time = models.TimeField()
