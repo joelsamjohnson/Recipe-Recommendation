@@ -118,16 +118,16 @@ class RecipeLikeAPIView(generics.CreateAPIView):
             user=request.user, recipe=recipe)
         if created:
             new_like.save()
-            return Response({"message": "Recipe liked successfully."}, status=status.HTTP_201_CREATED)
-        return Response({"message": "You already liked this recipe."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"status": 1,"message": "Recipe liked successfully."}, status=status.HTTP_201_CREATED)
+        return Response({"status": 0,"message": "You already liked this recipe."}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         recipe = get_object_or_404(Recipe, id=self.kwargs['pk'])
         like = RecipeLike.objects.filter(user=request.user, recipe=recipe)
         if like.exists():
             like.delete()
-            return Response({"message": "Like removed successfully."}, status=status.HTTP_200_OK)
-        return Response({"message": "Like not found."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"status": 1,"message": "Like removed successfully."}, status=status.HTTP_200_OK)
+        return Response({"status": 0,"message": "Like not found."}, status=status.HTTP_400_BAD_REQUEST)
         
 
     def perform_create(self, serializer):
@@ -155,8 +155,8 @@ class RecipeCommentAPIView(generics.ListCreateAPIView):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             serializer.save(user=request.user, recipe_id=pk)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'status': 1, 'message': 'Comment created successfully', 'data': serializer.data}, status=status.HTTP_201_CREATED)
+        return Response({'status': 1, 'message': 'Comment created successfully', 'data': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -173,10 +173,10 @@ class CommentsonRecipesView(generics.ListCreateAPIView):
     serializer_class = RecipeCommentSerializer
 
     def get_queryset(self):
-        queryset = RecipeComment.objects.all()
+        queryset = super().get_queryset()
         recipe_id = self.kwargs.get('recipe_id')
         if recipe_id:
-            queryset = queryset.filter(recipe__comment__id=comment_id)
+            queryset = queryset.filter(recipe_id=recipe_id)
         return queryset
 
 

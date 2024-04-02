@@ -26,6 +26,7 @@ class Profile(models.Model):
     bookmarks = models.ManyToManyField(Recipe, related_name='bookmarked_by')
     avatar = models.ImageField(upload_to='avatar', blank=True)
     bio = models.CharField(max_length=200, blank=True)
+    status = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username

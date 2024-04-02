@@ -47,7 +47,7 @@ class ProfileSerializer(CustomUserSerializer):
     """
     class Meta:
         model = Profile
-        fields = ('bookmarks', 'bio')
+        fields = ('bookmarks', 'bio', 'status')
 
 
 class ProfileAvatarSerializer(serializers.ModelSerializer):

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import RecipeCreateAPIView, RecipeListAPIView, RecipeAPIView, RecipeLikeAPIView, RecipeCommentAPIView, MyRecipeView, FeedAPIView, yummly_autocomplete, category_feed, yummly_feeds_list, yummly_search, get_categories_list, get_list_similarities, time_based_yummly_feeds
+from .views import RecipeCreateAPIView, RecipeListAPIView, RecipeAPIView, RecipeLikeAPIView, RecipeCommentAPIView, CommentsonRecipesView, MyRecipeView, FeedAPIView, yummly_autocomplete, category_feed, yummly_feeds_list, yummly_search, get_categories_list, get_list_similarities, time_based_yummly_feeds
 
 app_name = 'recipe'
 
@@ -10,7 +10,7 @@ urlpatterns = [
     path('create/', RecipeCreateAPIView.as_view(), name="recipe-create"),
     path('<int:pk>/like/', RecipeLikeAPIView.as_view(), name='recipe-like'),
     path('<int:pk>/comment/', RecipeCommentAPIView.as_view(), name='recipe-comment'),
-    path('comment/recipe/<int:pk>/', RecipeCommentAPIView.as_view(), name='recipe-comments'),
+    path('<int:recipe_id>/comments/', CommentsonRecipesView.as_view(), name='recipe-comments'),
     path('my-recipes/', MyRecipeView.as_view(), name="view-user-recipe"),
     path('feed/', FeedAPIView.as_view(), name='feed'),
 
