@@ -56,7 +56,8 @@ class CertificateSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Certificate
-        fields = ('verified', 'cert')
+        fields = ['cert', 'profile']
+        read_only_fields = ['verified']
 
     def get_cert_url(self, obj):
         request = self.context.get('request')
@@ -64,6 +65,8 @@ class CertificateSerializer(serializers.ModelSerializer):
             return request.build_absolute_uri(obj.cert.url)
         else:
             return None
+
+
 
 class ProfileAvatarSerializer(serializers.ModelSerializer):
     """

@@ -156,7 +156,7 @@ class RecipeCommentAPIView(generics.ListCreateAPIView):
         if serializer.is_valid():
             serializer.save(user=request.user, recipe_id=pk)
             return Response({'status': 1, 'message': 'Comment created successfully', 'data': serializer.data}, status=status.HTTP_201_CREATED)
-        return Response({'status': 1, 'message': 'Comment created successfully', 'data': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'status': 0, 'message': 'Comment not added', 'data': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)

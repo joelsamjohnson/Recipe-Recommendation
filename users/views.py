@@ -9,8 +9,8 @@ from django.shortcuts import get_object_or_404
 from recipe.models import Recipe
 from .models import Profile, Certificate
 from recipe.serializers import RecipeSerializer
+from .serializers import CertificateSerializer
 from . import serializers
-
 
 User = get_user_model()
 
@@ -93,6 +93,27 @@ class UserProfileAPIView(RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user.profile
+
+
+class UserCertificateUploadAPIView(GenericAPIView):
+    serializer_class = CertificateSerializer
+
+    def post(self, request, *args, **kwargs):
+        # Assume the user profile is linked to the user and identified by 'profile_id' in the request
+        profile_id = request.data.get('profile')
+        user_profile = Profile.objects.get(id=profile_id)
+
+        # Optional: Check if the user is authorized to upload to this profile
+        if request.user != user_profile.user:
+            return Response({"status": 0,"message": "Unauthorized"}, status=status.HTTP_403_FORBIDDEN)
+
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()  # Save the new certificate with the uploaded file
+            return Response({"status": 1, "message": 'Certificate uploaded', "data": serializer.data}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"status": 0, "message": 'Certificate upload error', "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserVerifiedStatusAPIView(GenericAPIView):

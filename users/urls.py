@@ -11,8 +11,10 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
     path('logout/', views.UserLogoutAPIView.as_view(), name='logout-user'),
     path('', views.UserAPIView.as_view(), name='user-info'),
+    path('upload-certificate/', views.UserCertificateUploadAPIView.as_view(), name='upload_certificate'),
     path('profile/', views.UserProfileAPIView.as_view(),name='user-profile'),
     path('profile/avatar/', views.UserAvatarAPIView.as_view(), name='user-avatar'),
+    path('profile/verified/', views.UserVerifiedStatusAPIView.as_view(), name='user-verified'),
     path('profile/<int:pk>/bookmarks/', views.UserBookmarkAPIView.as_view(), name='user-bookmark'),
     path('password/change/', views.PasswordChangeAPIView.as_view(), name='change-password'),
 ]
