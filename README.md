@@ -1,6 +1,6 @@
 # Recipe Sharing API
 
-This API allows users to share recipes and find recipes. It is developed using Django rest framework. You can find the api [here](https://recipe-backend-api.herokuapp.com/).
+This API allows users to share recipes and find recipes. It is developed using Django rest framework. 
 
 ## Basic Features
 
@@ -8,9 +8,11 @@ This API allows users to share recipes and find recipes. It is developed using D
 - JWT authentication.
 - CRUD endpoints for recipe.
 - Search functionality for recipes.
+- Filter search functionality for recipes
+- Step-by-Step Recipes with Image and Ingredients
+- Chef Verification System
 - Password reset functionality.
-- Documentation using `drf_spectacular` which support OAS3.
-- Unit test using coverage and factory boy.
+- Documentation using `drf_spectacular`.
 - Frontend is built using React.js and can be found [here](https://github.com/earthcomfy/Recipe-app).
 
 ## Quick Start
@@ -24,18 +26,14 @@ To get this project up and running locally on your computer follow the following
 ```
 $ pip install -r requirements.txt
 ```
-
-4. Set up a Postgres database for the project.
-5. Rename the `.env.example` file found in the root directory of the project to `.env` and update
-   the environment variables accordingly. **Note:** For local development, leave the Cloudinary configs empty.
-6. Run the following commands to setup the database tables and create a super user.
+4. Run the following commands to setup the database tables and create a super user.
 
 ```
 $ python manage.py migrate
 $ python manage.py createsuperuser
 ```
 
-7. Run the development server using:
+5. Run the development server using:
 
 ```
 $ python manage.py runserver
