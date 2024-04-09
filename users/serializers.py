@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
 
-from .models import CustomUser, Profile
+from .models import CustomUser, Profile, Certificate
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -49,6 +49,21 @@ class ProfileSerializer(CustomUserSerializer):
         model = Profile
         fields = ('bookmarks', 'bio', 'status')
 
+
+class CertificateSerializer(serializers.ModelSerializer):
+    """
+    Serializer class to serialize the user Profile Certificate model
+    """
+    class Meta:
+        model = Certificate
+        fields = ('verified', 'cert')
+
+    def get_cert_url(self, obj):
+        request = self.context.get('request')
+        if obj.cert and hasattr(obj.cert, 'url'):
+            return request.build_absolute_uri(obj.cert.url)
+        else:
+            return None
 
 class ProfileAvatarSerializer(serializers.ModelSerializer):
     """

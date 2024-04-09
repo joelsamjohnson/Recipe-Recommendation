@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 
 from recipe.models import Recipe
-from .models import Profile
+from .models import Profile, Certificate
 from recipe.serializers import RecipeSerializer
 from . import serializers
 
@@ -93,6 +93,24 @@ class UserProfileAPIView(RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user.profile
+
+
+class UserVerifiedStatusAPIView(GenericAPIView):
+    """
+    Get user profile verified status
+    """
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        try:
+            profile = Profile.objects.get(user=user)
+            certificate = Certificate.objects.get(profile=profile)
+            is_verified = certificate.verified
+        except (Profile.DoesNotExist, Certificate.DoesNotExist):
+            return Response({"error": "Profile or certificate not found.", "verified": False})
+
+        return Response({"status": is_verified})
 
 
 class UserAvatarAPIView(RetrieveUpdateAPIView):

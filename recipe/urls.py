@@ -13,7 +13,6 @@ urlpatterns = [
     path('<int:recipe_id>/comments/', CommentsonRecipesView.as_view(), name='recipe-comments'),
     path('my-recipes/', MyRecipeView.as_view(), name="view-user-recipe"),
     path('feed/', FeedAPIView.as_view(), name='feed'),
-
     path('yummly-autocomplete/', yummly_autocomplete, name='yummly_autocomplete'),
     path('yummly-search/', yummly_search, name='yummly_search'),
     path('yummly-feeds-list/', yummly_feeds_list, name='yummly_feeds_list'),
